@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { View, Text } from 'react-native'
-import { Stack } from 'expo-router'
+import { useRouter, Stack } from 'expo-router'
 import { COLORS, FONT } from '../../constants/theme'
 import { Avatar, BottomNavigation, Icon, IconButton } from 'react-native-paper'
 import Chats from '../tabs/Chats'
@@ -10,6 +10,7 @@ import Calls from '../tabs/Calls'
 const HomeScreen = () => {
     const [index, setIndex] = useState(0);
     const [showSearchBar, setShowSearchBar] = useState(false);
+    const router = useRouter();
     const [routes] = React.useState([
         { key: 'chats', title: 'Chats', focusedIcon: 'message' },
         { key: 'groups', title: 'Groups', focusedIcon: 'account-group' },
@@ -30,9 +31,14 @@ const HomeScreen = () => {
                     headerTitle: "Let's Talk",
                     headerBackVisible: false,
                     headerRight: () => {
-                        return <IconButton icon="account-search"
-                            size={27}
-                            onPress={() => console.log('Pressed')} />
+                        return <>
+                            <IconButton icon="logout"
+                                size={27}
+                                onPress={() => router.push('./Screens/SignUp')} />
+                            <IconButton icon="account-plus"
+                                size={27}
+                                onPress={() => router.push('./Screens/AddUser')} />
+                        </>
                     },
                 }} />
             <BottomNavigation

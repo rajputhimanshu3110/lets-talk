@@ -4,8 +4,8 @@ import { FONT } from '../../constants/theme'
 const Calls = () => {
     return (
         <View style={{ flex: 1, flexWrap: 'wrap', justifyContent: 'center', marginHorizontal: 'auto' }}>
-            <Text style={{ fontFamily: FONT.medium, fontSize: 19 }}>
-                Feature will be rolled out soon
+            <Text style={{ fontFamily: FONT.medium, fontSize: 16 }}>
+                Calling Feature will be rolled out soon
             </Text>
         </View>
     )

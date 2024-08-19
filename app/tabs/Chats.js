@@ -1,47 +1,30 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { View, StyleSheet, FlatList, TouchableOpacity, Image, ScrollView } from 'react-native'
 import { Avatar, Searchbar, Text } from 'react-native-paper'
 import { useRouter } from 'expo-router'
 import users from '../../sample/Users'
+import Chat from '../components/Chat'
 const Chats = ({ showSearchBar, setShowSearchBar }) => {
     const [searchQuery, setSearchQuery] = React.useState('');
-    const router = useRouter();
-    const openChat = (user) => {
-        router.push({ pathname: '../Screens/ChatScreen', params: user });
+    const [chatUsers, setChatUsers] = useState(users);
+
+    const onSearch = (text) => {
+        setSearchQuery(text);
+        var filteredUser = users.filter(item => item.name && item.name.includes(text));
+        setChatUsers(filteredUser);
     }
-    const RenderItem = ({ item }) => (
-
-        <TouchableOpacity
-            style={styles.userContainer}
-            onPress={() => openChat(item)}
-            key={item.name}
-        >
-            {item.avatar ?
-                <Avatar.Image
-                    source={{ uri: item.avatar }} size={40}
-                /> :
-                <Avatar.Icon size={40} icon="account" />
-            }
-            <View style={styles.userDetails}>
-                <Text style={styles.userName} numberOfLines={1} width={180}>{item.name}</Text>
-                <Text variant="labelSmall">Last Seen</Text>
-            </View>
-            <Text variant="labelLarge" style={{ marginLeft: 'auto' }}>3:30 PM</Text>
-
-        </TouchableOpacity>
-    );
 
     return (
         <View style={styles.container}>
             <ScrollView>
                 <Searchbar
                     placeholder="Enter to search user"
-                    onChangeText={setSearchQuery}
+                    onChangeText={text => onSearch(text)}
                     value={searchQuery}
                     style={styles.searchBar}
                 />
-                {users.map((item) => {
-                    return <RenderItem item={item} />
+                {chatUsers.map((item) => {
+                    return <Chat item={item} />
                 })}
             </ScrollView>
 
