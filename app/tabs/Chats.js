@@ -4,7 +4,7 @@ import { Avatar, Searchbar, Text } from 'react-native-paper'
 import { useRouter } from 'expo-router'
 import users from '../../sample/Users'
 import Chat from '../components/Chat'
-const Chats = ({ showSearchBar, setShowSearchBar }) => {
+const Chats = ({ showSearchBar }) => {
     const [searchQuery, setSearchQuery] = React.useState('');
     const [chatUsers, setChatUsers] = useState(users);
 
@@ -16,17 +16,21 @@ const Chats = ({ showSearchBar, setShowSearchBar }) => {
 
     return (
         <View style={styles.container}>
-            <ScrollView>
-                <Searchbar
+            <FlatList
+                data={chatUsers}
+                ListHeaderComponent={<Searchbar
                     placeholder="Enter to search user"
                     onChangeText={text => onSearch(text)}
                     value={searchQuery}
-                    style={styles.searchBar}
-                />
-                {chatUsers.map((item) => {
+                    style={styles.searchBar(showSearchBar)}
+
+                />}
+                renderItem={({ item, index }) => {
                     return <Chat item={item} />
-                })}
-            </ScrollView>
+                }}
+                showsVerticalScrollIndicator={false}
+                keyExtractor={item => item.name}
+            />
 
         </View>
     )
@@ -61,7 +65,10 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: '#333',
     },
-    searchBar: {
-        margin: 10,
+    searchBar: (showSearchBar) => {
+        return {
+            margin: 10,
+            display: showSearchBar ? '' : 'none',
+        }
     }
 })

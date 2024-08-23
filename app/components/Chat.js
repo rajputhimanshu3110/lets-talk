@@ -1,8 +1,8 @@
 import React from 'react'
-import { TouchableOpacity, View, StyleSheet } from 'react-native'
+import { TouchableOpacity, View, StyleSheet, Alert } from 'react-native'
 import { Text, Avatar } from 'react-native-paper'
-import { COLORS } from '../../constants/theme'
 import { useRouter } from 'expo-router'
+
 const Chat = ({ item }) => {
     const router = useRouter();
     const openChat = (user) => {
@@ -12,6 +12,7 @@ const Chat = ({ item }) => {
         <TouchableOpacity
             style={styles.userContainer}
             onPress={() => openChat(item)}
+            onLongPress={() => Alert.alert("Hello")}
             key={item.name}
         >
             {item.avatar ?
