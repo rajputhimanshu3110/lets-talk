@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useMemo } from 'react'
 import { View, Text, Alert } from 'react-native'
 import { useRouter, Stack } from 'expo-router'
 import { COLORS, FONT } from '../../constants/theme'
@@ -6,10 +6,13 @@ import { Avatar, BottomNavigation, Icon, IconButton } from 'react-native-paper'
 import Chats from '../tabs/Chats'
 import Groups from '../tabs/Groups'
 import Calls from '../tabs/Calls'
-import SessionService from '../../services/SessionService'
-import Profile from './Profile'
+import SessionService from '../../services/SessionService';
+import Profile from './Profile';
+import { io } from 'socket.io-client';
 
 const HomeScreen = () => {
+
+    const socket = useMemo(() => io('http://192.168.117.152:3000'), []);
     const [index, setIndex] = useState(3);
     const [user, setUser] = useState();
     const [showSearchBar, setShowSearchBar] = useState(false);
@@ -21,15 +24,18 @@ const HomeScreen = () => {
         { key: 'profile', title: 'Profile', focusedIcon: 'account' },
     ]);
 
+
+
     useEffect(() => {
         const getToken = async () => {
             const token = await SessionService.get.token();
             const userInfo = await SessionService.get.userInfo();
-            console.log(token, userInfo);
             setUser(userInfo);
             if (!token) {
                 router.push('./Screens/Login');
             }
+            socket.emit('addSocket', { mobile: userInfo.mobile, socketID: socket.id });
+
         }
         getToken();
     }, [])

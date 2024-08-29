@@ -15,15 +15,15 @@ const Chat = ({ item }) => {
             onLongPress={() => Alert.alert("Hello")}
             key={item.name}
         >
-            {item.avatar ?
+            {item.profile ?
                 <Avatar.Image
-                    source={{ uri: item.avatar }} size={40}
+                    source={{ uri: item.profile }} size={40}
                 /> :
                 <Avatar.Icon size={40} icon="account" />
             }
             <View style={styles.userDetails}>
                 <Text style={styles.userName} numberOfLines={1} width={180}>{item.name}</Text>
-                <Text variant="labelSmall" numberOfLines={1} width={230}>{item.status}</Text>
+                <Text variant="labelSmall" numberOfLines={1} width={230}>{item.about}</Text>
             </View>
             <Text variant="labelLarge" style={{ marginLeft: 'auto' }}>3:30 PM</Text>
 

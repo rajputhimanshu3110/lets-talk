@@ -5,12 +5,56 @@ import { COLORS, FONT } from '../../constants/theme'
 import { IconButton, Text, Searchbar } from 'react-native-paper'
 import Chat from '../components/Chat'
 import users from '../../sample/Users'
+import * as Contacts from 'expo-contacts';
+import UserService from '../../services/main/UserService'
 
 const AddUser = () => {
-    const [user, setUser] = useState(users);
+    const [user, setUser] = useState([]);
     const [showSearchBar, setShowSearchBar] = useState(true);
     const [searchQuery, setSearchQuery] = React.useState('');
+    const [contacts, setContacts] = useState([]);
 
+    const getContacts = async () => {
+        const { status } = await Contacts.requestPermissionsAsync();
+        if (status === 'granted') {
+            const { data } = await Contacts.getContactsAsync({
+                fields: [Contacts.Fields.Name, Contacts.Fields.PhoneNumbers],
+            });
+
+            if (data.length > 0) {
+                var connections = [];
+                data.forEach((people) => {
+                    people.phoneNumbers.forEach((number) => {
+                        connections.push({ name: people.name, number: number.number });
+                    })
+                })
+                setContacts(connections);
+
+
+
+                UserService.getAll((res) => {
+                    if (res.status) {
+                        const all = []
+                        connections.forEach((u) => {
+                            const num2 = u.number.replace(/\s+/g, '');
+                            res.data.forEach(item => {
+                                if (item.mobile === parseInt(num2)) {
+                                    item.name = u.name;
+                                    all.push(item);
+                                }
+                            });
+                        });
+                        setUser(all);
+                    }
+                })
+
+            }
+        }
+    };
+
+    useEffect(() => {
+        getContacts();
+    }, []);
 
     const onSearch = (text) => {
         setSearchQuery(text);
@@ -59,9 +103,9 @@ const AddUser = () => {
                 }} />
 
             <ScrollView>
-                {user.map((message) => {
+                {user.length ? user.map((message) => {
                     return <Chat item={message} />
-                })}
+                }) : <Text>No User Found</Text>}
 
             </ScrollView>
         </>

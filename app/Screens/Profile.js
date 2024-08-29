@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { View, StyleSheet } from 'react-native'
-import { Stack } from 'expo-router'
 import { Avatar, Text } from 'react-native-paper'
 import { FONT } from '../../constants/theme'
 import SessionService from '../../services/SessionService'
+
+
+
 const Profile = () => {
     const [user, setUser] = useState();
 
