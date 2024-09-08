@@ -8,6 +8,9 @@ const AuthenticationService = {
     register: (param, cb) => {
         APIService.post(Urls.register, param, cb);
     },
+    uploadProfile: (param, cb) => {
+        APIService.post(Urls.upload, param, cb);
+    }
 
 
 }

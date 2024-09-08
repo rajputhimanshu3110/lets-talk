@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { StatusBar } from 'expo-status-bar';
-import { View, StyleSheet } from 'react-native'
-import { ActivityIndicator, MD2Colors, Text, TextInput, Button } from 'react-native-paper';
+import { View, StyleSheet, BackHandler, Alert } from 'react-native'
+import { Text, TextInput, Button } from 'react-native-paper';
 import { useRouter, Stack, Link } from 'expo-router';
 import { FONT, COLORS } from '../../constants/theme';
 import AuthenticationService from '../../services/main/AuthenticationService';
@@ -21,7 +21,6 @@ const LoginComponent = () => {
             email: login.username,
             password: login.password
         };
-        console.log(param);
         AuthenticationService.login(param, (res) => {
             if (res.status) {
                 SessionService.set.token(res.data.token);
@@ -34,13 +33,36 @@ const LoginComponent = () => {
         })
 
     }
+
+    useEffect(() => {
+        const backAction = () => {
+            Alert.alert('Exit App', 'Are you sure you want to exit app?', [
+                {
+                    text: 'Cancel',
+                    onPress: () => null,
+                    style: 'cancel',
+                },
+                { text: 'YES', onPress: () => BackHandler.exitApp() },
+            ]);
+            return true;
+        };
+
+        const backHandler = BackHandler.addEventListener(
+            'hardwareBackPress',
+            backAction,
+        );
+
+        return () => backHandler.remove();
+    }, []);
+
     return (
         <>
             <Stack.Screen
                 options={{
                     headerStyle: { backgroundColor: COLORS.lightWhite },
                     headerShadowVisible: false,
-                    headerTitle: ""
+                    headerTitle: "",
+                    headerBackVisible: false,
                 }} />
             <View style={{ backgroundColor: COLORS.lightWhite }}>
                 <View style={styles.container}>

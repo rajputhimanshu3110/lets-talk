@@ -12,7 +12,6 @@ const Profile = () => {
     useEffect(() => {
         const getToken = async () => {
             const userInfo = await SessionService.get.userInfo();
-            console.log(userInfo);
             setUser(userInfo);
         }
         getToken();
@@ -24,7 +23,7 @@ const Profile = () => {
                     <View style={styles.imgContainer}>
                         <Avatar.Image size={100} source={{ uri: user.profile }} />
                     </View>
-                    <Text style={{ fontFamily: FONT.bold, textAlign: 'center', flex: 1 }} variant="headlineSmall">Hi, Himanshu</Text>
+                    <Text style={{ fontFamily: FONT.bold, textAlign: 'center', flex: 1 }} variant="headlineSmall">Hi, {user.name}</Text>
                     <View style={styles.DetailsContainer}>
                         <Text>Mobile Number :  {user.mobile || 'N/A'}</Text>
                         <Text>Email : {user.email}</Text>

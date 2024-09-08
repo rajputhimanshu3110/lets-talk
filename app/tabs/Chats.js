@@ -1,10 +1,12 @@
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { View, StyleSheet, FlatList, TouchableOpacity, Image, ScrollView } from 'react-native'
 import { Avatar, Searchbar, Text } from 'react-native-paper'
-import { useRouter } from 'expo-router'
 import users from '../../sample/Users'
 import Chat from '../components/Chat'
+import { DBContext } from '../../services/main/SQL'
+import { FONT } from '../../constants/theme'
 const Chats = ({ showSearchBar }) => {
+    const { getUser } = useContext(DBContext);
     const [searchQuery, setSearchQuery] = React.useState('');
     const [chatUsers, setChatUsers] = useState(users);
 
@@ -14,23 +16,34 @@ const Chats = ({ showSearchBar }) => {
         setChatUsers(filteredUser);
     }
 
+    useEffect(() => {
+        const getUsers = async () => {
+            const data = await getUser();
+            setChatUsers(data);
+        }
+        getUsers();
+    }, [])
+
     return (
         <View style={styles.container}>
-            <FlatList
-                data={chatUsers}
-                ListHeaderComponent={<Searchbar
-                    placeholder="Enter to search user"
-                    onChangeText={text => onSearch(text)}
-                    value={searchQuery}
-                    style={styles.searchBar(showSearchBar)}
+            {chatUsers.length ?
+                <FlatList
+                    data={chatUsers}
+                    ListHeaderComponent={<Searchbar
+                        placeholder="Enter to search user"
+                        onChangeText={text => onSearch(text)}
+                        value={searchQuery}
+                        style={styles.searchBar(showSearchBar)}
 
-                />}
-                renderItem={({ item, index }) => {
-                    return <Chat item={item} />
-                }}
-                showsVerticalScrollIndicator={false}
-                keyExtractor={item => item.name}
-            />
+                    />}
+                    renderItem={({ item, index }) => {
+                        return <Chat item={item} />
+                    }}
+                    showsVerticalScrollIndicator={false}
+                    keyExtractor={item => item.name}
+                /> :
+                <Text style={{ fontFamily: FONT.bold, textAlign: 'center', marginTop: 10 }}>Start chatting with you friend</Text>
+            }
 
         </View>
     )

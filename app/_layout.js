@@ -2,6 +2,8 @@ import { Stack } from 'expo-router';
 import { useCallback } from 'react';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen'
+import { ContextProvider } from '../context/SocketContext';
+import { SQLProvider } from '../services/main/SQL';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -19,7 +21,13 @@ const Layout = () => {
 
     if (!fontsLoaded) return null;
     onLayoutRootView(); //have to fix this only for now it is
-    return <Stack onLayout={onLayoutRootView} />
+    return <>
+        <ContextProvider>
+            <SQLProvider>
+                <Stack onLayout={onLayoutRootView} />
+            </SQLProvider>
+        </ContextProvider>
+    </>
 }
 
 export default Layout

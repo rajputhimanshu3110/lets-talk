@@ -4,7 +4,6 @@ import { Text, Surface, Avatar } from 'react-native-paper'
 const Message = ({ message }) => {
     return (
         <View style={{ alignItems: message.isReceived ? 'flex-start' : 'flex-end' }}>
-
             <Surface style={styles.messageBox(message.isReceived ? '#ededed' : 'skyblue')} elevation={1}>
                 <Text style={styles.message(message.isReceived ? 'black' : 'brown')}>{message.message} </Text>
                 <Text style={styles.time}>{message.time} </Text>
@@ -23,7 +22,7 @@ const styles = StyleSheet.create({
             paddingLeft: 20,
             backgroundColor: color,
             width: 'content-fit',
-            maxWidth: 260,
+            maxWidth: '70%',
             marginHorizontal: 10,
             marginVertical: 7,
             borderRadius: 18

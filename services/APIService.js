@@ -9,9 +9,9 @@ const APIService = {
     },
     post: async function (url, param, cb) {
         const response = await axios.post(url, param, {
-            // headers: {
-            //     'Authorization': SessionService.get.header(),
-            // }
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
         })
         cb(response.data);
     }
